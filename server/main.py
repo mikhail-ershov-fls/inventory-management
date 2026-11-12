@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Optional
-from pydantic import BaseModel
+from itertools import count
+from typing import List, Literal, Optional
+from pydantic import BaseModel, Field
 from mock_data import inventory_items, orders, demand_forecasts, backlog_items, spending_summary, monthly_spending, category_spending, recent_transactions, purchase_orders
 
 app = FastAPI(title="Factory Inventory Management System")
@@ -303,6 +304,60 @@ def get_monthly_trends():
     result = list(months.values())
     result.sort(key=lambda x: x['month'])
     return result
+
+# --- Tasks -----------------------------------------------------------------
+# In-memory task list for the profile menu's Tasks modal. Like the rest of the
+# mock data, tasks reset when the server restarts.
+
+class Task(BaseModel):
+    id: str
+    title: str
+    priority: Literal["high", "medium", "low"]
+    dueDate: str
+    status: Literal["pending", "completed"]
+
+class CreateTaskRequest(BaseModel):
+    title: str = Field(min_length=1)
+    priority: Literal["high", "medium", "low"] = "medium"
+    dueDate: str
+
+tasks: List[dict] = []
+# String ids ("task-1") so API tasks never collide with the client's built-in
+# mock tasks, which use small integer ids.
+_task_counter = count(1)
+
+def _find_task(task_id: str) -> dict:
+    task = next((t for t in tasks if t["id"] == task_id), None)
+    if not task:
+        raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+    return task
+
+@app.get("/api/tasks", response_model=List[Task])
+def get_tasks():
+    """Get all tasks"""
+    return tasks
+
+@app.post("/api/tasks", response_model=Task, status_code=201)
+def create_task(request: CreateTaskRequest):
+    """Create a pending task"""
+    task = {"id": f"task-{next(_task_counter)}", **request.model_dump(), "status": "pending"}
+    # Newest first, matching how the client inserts new tasks
+    tasks.insert(0, task)
+    return task
+
+@app.patch("/api/tasks/{task_id}", response_model=Task)
+def toggle_task(task_id: str):
+    """Toggle a task between pending and completed"""
+    task = _find_task(task_id)
+    task["status"] = "completed" if task["status"] == "pending" else "pending"
+    return task
+
+@app.delete("/api/tasks/{task_id}", response_model=Task)
+def delete_task(task_id: str):
+    """Delete a task and return it"""
+    task = _find_task(task_id)
+    tasks.remove(task)
+    return task
 
 if __name__ == "__main__":
     import uvicorn
