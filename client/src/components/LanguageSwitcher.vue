@@ -2,6 +2,7 @@
   <div class="language-switcher">
     <button
       class="language-button"
+      :aria-label="localeName"
       @click="toggleDropdown"
       @blur="handleBlur"
     >
@@ -96,13 +97,14 @@ const selectLanguage = (locale) => {
 .language-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background var(--transition), border-color var(--transition);
   font-family: inherit;
   font-size: 0.875rem;
   color: #334155;
@@ -134,13 +136,13 @@ const selectLanguage = (locale) => {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + var(--space-2));
   right: 0;
   min-width: 160px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   overflow: hidden;
 }
@@ -150,8 +152,8 @@ const selectLanguage = (locale) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   background: none;
   border: none;
   text-align: left;
@@ -179,5 +181,19 @@ const selectLanguage = (locale) => {
 .check-icon {
   color: #2563eb;
   flex-shrink: 0;
+}
+
+/* Small screens: icon-only trigger to save top bar space */
+@media (max-width: 639px) {
+  .language-label,
+  .language-button .chevron {
+    display: none;
+  }
+
+  .language-button {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
 }
 </style>

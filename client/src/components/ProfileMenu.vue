@@ -2,6 +2,7 @@
   <div class="profile-menu">
     <button
       class="profile-button"
+      :aria-label="currentUser.name"
       @click="toggleDropdown"
       @blur="handleBlur"
     >
@@ -123,26 +124,26 @@ const handleLogout = () => {
 .profile-button {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 0.875rem;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-2) 0 var(--space-1);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background var(--transition), border-color var(--transition);
   font-family: inherit;
 }
 
 .profile-button:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--color-surface-muted);
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: var(--color-accent);
   color: white;
   display: flex;
   align-items: center;
@@ -153,6 +154,7 @@ const handleLogout = () => {
 }
 
 .profile-name {
+  white-space: nowrap;
   font-size: 0.875rem;
   font-weight: 500;
   color: #0f172a;
@@ -169,21 +171,22 @@ const handleLogout = () => {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + var(--space-2));
   right: 0;
   min-width: 280px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: calc(100vw - 2 * var(--space-4));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   overflow: hidden;
 }
 
 .dropdown-header {
-  padding: 1rem;
+  padding: var(--space-4);
   display: flex;
-  gap: 0.875rem;
+  gap: var(--space-3);
   align-items: center;
   background: #f8fafc;
 }
@@ -192,7 +195,7 @@ const handleLogout = () => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: var(--color-accent);
   color: white;
   display: flex;
   align-items: center;
@@ -212,7 +215,7 @@ const handleLogout = () => {
   font-weight: 600;
   color: #0f172a;
   font-size: 0.938rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
 .user-email {
@@ -226,15 +229,15 @@ const handleLogout = () => {
 .dropdown-divider {
   height: 1px;
   background: #e2e8f0;
-  margin: 0.5rem 0;
+  margin: var(--space-2) 0;
 }
 
 .dropdown-item {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   background: none;
   border: none;
   text-align: left;
@@ -273,9 +276,21 @@ const handleLogout = () => {
   color: white;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.125rem 0.5rem;
+  padding: 0.125rem var(--space-2);
   border-radius: 12px;
   min-width: 20px;
   text-align: center;
+}
+
+/* Small screens: avatar-only trigger */
+@media (max-width: 639px) {
+  .profile-name,
+  .profile-button .chevron {
+    display: none;
+  }
+
+  .profile-button {
+    padding: 0 var(--space-1);
+  }
 }
 </style>

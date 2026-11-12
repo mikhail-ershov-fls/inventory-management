@@ -493,11 +493,11 @@ export default {
 
 <style scoped>
 .stat-change {
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
   font-size: 0.875rem;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--space-1);
 }
 
 .stat-change.positive {
@@ -514,19 +514,19 @@ export default {
 }
 
 .chart-card {
-  margin-bottom: 1.75rem;
+  margin-bottom: var(--space-6);
 }
 
 .chart-legend {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-6);
   font-size: 0.875rem;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   color: #64748b;
 }
 
@@ -546,8 +546,8 @@ export default {
 .stats-grid-finance {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
 }
 
 .revenue-card {
@@ -563,7 +563,7 @@ export default {
 }
 
 .stat-meta {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   font-size: 0.813rem;
   color: #64748b;
 }
@@ -584,7 +584,7 @@ export default {
   justify-content: center;
   align-items: flex-end;
   height: 100%;
-  padding-bottom: 2rem;
+  padding-bottom: var(--space-8);
 }
 
 .revenue-bar, .cost-bar {
@@ -610,20 +610,30 @@ export default {
 }
 
 .chart-container {
-  padding: 1.5rem 0;
+  padding: var(--space-6) 0;
 }
 
 .bar-chart {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-6);
   height: 350px;
+}
+
+/* 12 monthly bars can't fit a phone screen: scroll the chart inside its card
+   rather than letting it widen the whole page. */
+.chart-container {
+  overflow-x: auto;
+}
+
+.chart-legend {
+  flex-wrap: wrap;
 }
 
 .y-axis {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-right: 1rem;
+  padding-right: var(--space-4);
   font-size: 0.75rem;
   color: #94a3b8;
   border-right: 1px solid #e2e8f0;
@@ -634,7 +644,7 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .bar-group {
@@ -652,7 +662,7 @@ export default {
   flex-direction: column-reverse;
   align-items: stretch;
   height: 100%;
-  padding-bottom: 2rem;
+  padding-bottom: var(--space-8);
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
@@ -686,7 +696,7 @@ export default {
 }
 
 .bar-label {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   font-size: 0.75rem;
   font-weight: 600;
   color: #64748b;
@@ -694,20 +704,22 @@ export default {
 
 .two-column-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 1.75rem;
+  /* min(450px, 100%) keeps the 2-column layout on desktop but lets a single
+     column shrink to the screen width on phones instead of forcing 450px. */
+  grid-template-columns: repeat(auto-fit, minmax(min(450px, 100%), 1fr));
+  gap: var(--space-6);
 }
 
 .category-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .category-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .category-info {
@@ -788,7 +800,7 @@ export default {
 
 .transactions-table th {
   text-align: left;
-  padding: 0.625rem 0.75rem;
+  padding: var(--space-3) var(--space-3);
   font-weight: 600;
   color: #475569;
   font-size: 0.75rem;
@@ -802,7 +814,7 @@ export default {
 }
 
 .transactions-table td {
-  padding: 0.75rem 0.75rem;
+  padding: var(--space-3) var(--space-3);
   border-bottom: 1px solid #f1f5f9;
   font-size: 0.875rem;
 }
