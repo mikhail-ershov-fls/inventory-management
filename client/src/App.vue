@@ -689,6 +689,12 @@ a:focus-visible {
 }
 
 /* Loading / error / empty states */
+/* Content kept on screen while a reload is in flight (see useDataLoader) */
+.is-refreshing {
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
 .loading {
   text-align: center;
   padding: var(--space-12);

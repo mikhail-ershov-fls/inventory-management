@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: reports-view-optimize
+expected_outcome: |
+  Reports.vue is fixed in place: stable keys instead of index keys, the per-bar max revenue computed once instead of per bar, API calls routed through client/src/api.js instead of hardcoded URLs, the hand-rolled number formatter replaced or shared, and the component converted to the project's Composition API style. The client builds, the Reports page shows the same quarterly table, chart and monthly table with no console errors, and a report lists what was changed and what was left.

@@ -5,31 +5,59 @@
       <p>{{ t('inventory.description') }}</p>
     </div>
 
-    <div v-if="loading" class="loading">{{ t('common.loading') }}</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else>
+    <div v-if="isInitialLoading" class="loading" role="status">{{ t('common.loading') }}</div>
+    <ErrorState v-else-if="error" @retry="loadInventory" />
+    <div v-else :class="{ 'is-refreshing': loading }" :aria-busy="loading">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">{{ t('inventory.stockLevels') }} ({{ filteredItems.length }} {{ t('inventory.skus') }})</h3>
-          <div class="search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-            </svg>
-            <input
-              v-model="searchQuery"
-              type="text"
-              :placeholder="t('inventory.searchPlaceholder')"
-              class="search-input"
-            />
-            <button
-              v-if="searchQuery"
-              @click="searchQuery = ''"
-              class="clear-search"
-              :title="t('inventory.clearSearch')"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <h3 class="card-title">
+            {{ t('inventory.stockLevels') }} ({{ filteredItems.length }} {{ t('inventory.skus') }})
+          </h3>
+          <div class="header-actions">
+            <div class="search-box">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"
+                />
               </svg>
+              <input
+                v-model="searchQuery"
+                type="text"
+                :placeholder="t('inventory.searchPlaceholder')"
+                class="search-input"
+              />
+              <button
+                v-if="searchQuery"
+                @click="searchQuery = ''"
+                class="clear-search"
+                :title="t('inventory.clearSearch')"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            <button
+              type="button"
+              class="export-button"
+              :disabled="filteredItems.length === 0"
+              :title="t('inventory.exportCsvTitle')"
+              @click="exportCsv"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path
+                  fill-rule="evenodd"
+                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {{ t('inventory.exportCsv') }}
             </button>
           </div>
         </div>
@@ -49,19 +77,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="item in filteredItems"
-                :key="item.id"
-                class="clickable-row"
-                @click="showItemDetail(item)"
-              >
-                <td><strong>{{ item.sku }}</strong></td>
+              <tr v-for="item in filteredItems" :key="item.id" class="clickable-row" @click="showItemDetail(item)">
+                <td>
+                  <strong>{{ item.sku }}</strong>
+                </td>
                 <td>{{ translateProductName(item.name) }}</td>
                 <td>{{ translateCategory(item.category) }}</td>
-                <td><strong>{{ item.quantity_on_hand }}</strong></td>
+                <td>
+                  <strong>{{ item.quantity_on_hand }}</strong>
+                </td>
                 <td>{{ item.reorder_point }}</td>
-                <td>{{ currencySymbol }}{{ item.unit_cost.toFixed(2) }}</td>
-                <td><strong>{{ currencySymbol }}{{ (item.quantity_on_hand * item.unit_cost).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</strong></td>
+                <td>{{ formatMoney(item.unit_cost, 2) }}</td>
+                <td>
+                  <strong>{{ formatMoney(item.quantity_on_hand * item.unit_cost, 2) }}</strong>
+                </td>
                 <td>{{ translateWarehouse(item.location) }}</td>
                 <td>
                   <span :class="['badge', getStockStatusClass(item)]">
@@ -75,11 +104,7 @@
       </div>
     </div>
 
-    <InventoryDetailModal
-      :is-open="showItemModal"
-      :inventory-item="selectedItem"
-      @close="showItemModal = false"
-    />
+    <InventoryDetailModal :is-open="showItemModal" :inventory-item="selectedItem" @close="showItemModal = false" />
   </div>
 </template>
 
@@ -88,22 +113,22 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { api } from '../api'
 import { useFilters } from '../composables/useFilters'
 import { useI18n } from '../composables/useI18n'
+import { useDataLoader } from '../composables/useDataLoader'
+import ErrorState from '../components/ErrorState.vue'
+import { useCurrency } from '../composables/useCurrency'
 import InventoryDetailModal from '../components/InventoryDetailModal.vue'
+import { toCsv, downloadCsv, dateStamp } from '../utils/csv'
 
 export default {
   name: 'Inventory',
   components: {
+    ErrorState,
     InventoryDetailModal
   },
   setup() {
-    const { t, currentCurrency, translateProductName, translateWarehouse } = useI18n()
+    const { t, translateProductName, translateWarehouse } = useI18n()
+    const { formatMoney } = useCurrency()
 
-    const currencySymbol = computed(() => {
-      return currentCurrency.value === 'JPY' ? '¥' : '$'
-    })
-
-    const loading = ref(true)
-    const error = ref(null)
     const items = ref([])
     const searchQuery = ref('')
 
@@ -115,7 +140,7 @@ export default {
     const { selectedLocation, selectedCategory, getCurrentFilters } = useFilters()
 
     // Stock status order for sorting (using status keys)
-    const STATUS_ORDER = { 'lowStock': 0, 'adequate': 1, 'inStock': 2 }
+    const STATUS_ORDER = { lowStock: 0, adequate: 1, inStock: 2 }
 
     // Get stock status key (for sorting and translation)
     const getStockStatusKey = (item) => {
@@ -135,9 +160,7 @@ export default {
       // Apply search filter if query exists
       if (searchQuery.value.trim()) {
         const query = searchQuery.value.toLowerCase().trim()
-        filtered = filtered.filter(item =>
-          item.name.toLowerCase().includes(query)
-        )
+        filtered = filtered.filter((item) => item.name.toLowerCase().includes(query))
       }
 
       // Sort by stock status: Low Stock first, then Adequate, then In Stock
@@ -149,21 +172,17 @@ export default {
       })
     })
 
-    const loadInventory = async () => {
-      try {
-        loading.value = true
+    // Latest-request-wins loading; keeps current data visible while refetching (see useDataLoader)
+    const { loading, error, isInitialLoading, reload: loadInventory } = useDataLoader(
+      (signal) => {
         const filters = getCurrentFilters()
         // Inventory doesn't support month/status filters, only warehouse and category
-        items.value = await api.getInventory({
-          warehouse: filters.warehouse,
-          category: filters.category
-        })
-      } catch (err) {
-        error.value = 'Failed to load inventory: ' + err.message
-      } finally {
-        loading.value = false
+        return api.getInventory({ warehouse: filters.warehouse, category: filters.category }, { signal })
+      },
+      (data) => {
+        items.value = data
       }
-    }
+    )
 
     // Watch for filter changes and reload data
     watch([selectedLocation, selectedCategory], () => {
@@ -188,9 +207,9 @@ export default {
     const translateCategory = (category) => {
       const categoryMap = {
         'Circuit Boards': t('categories.circuitBoards'),
-        'Sensors': t('categories.sensors'),
-        'Actuators': t('categories.actuators'),
-        'Controllers': t('categories.controllers'),
+        Sensors: t('categories.sensors'),
+        Actuators: t('categories.actuators'),
+        Controllers: t('categories.controllers'),
         'Power Supplies': t('categories.powerSupplies')
       }
       return categoryMap[category] || category
@@ -201,11 +220,38 @@ export default {
       showItemModal.value = true
     }
 
+    // Export exactly what the table shows: current warehouse/category filters,
+    // search query, and status sort order. Headers and labels follow the active
+    // language; numeric columns are raw values (no currency symbol or thousands
+    // separators) so spreadsheets treat them as numbers. Costs are in USD, the
+    // unit the API returns, so the header names the currency explicitly.
+    const exportCsv = () => {
+      const columns = [
+        { header: t('inventory.table.sku'), value: (item) => item.sku },
+        { header: t('inventory.table.itemName'), value: (item) => translateProductName(item.name) },
+        { header: t('inventory.table.category'), value: (item) => translateCategory(item.category) },
+        { header: t('inventory.table.quantityOnHand'), value: (item) => item.quantity_on_hand },
+        { header: t('inventory.table.reorderPoint'), value: (item) => item.reorder_point },
+        { header: `${t('inventory.table.unitCost')} (USD)`, value: (item) => item.unit_cost },
+        {
+          header: `${t('inventory.table.totalValue')} (USD)`,
+          // Round to cents to avoid float artifacts like 1234.5600000000002
+          value: (item) => Math.round(item.quantity_on_hand * item.unit_cost * 100) / 100
+        },
+        { header: t('inventory.table.location'), value: (item) => translateWarehouse(item.location) },
+        { header: t('inventory.table.status'), value: (item) => getStockStatus(item) }
+      ]
+      downloadCsv(`inventory-${dateStamp()}.csv`, toCsv(columns, filteredItems.value))
+    }
+
     onMounted(loadInventory)
 
     return {
+      exportCsv,
       t,
       loading,
+      isInitialLoading,
+      loadInventory,
       error,
       items,
       searchQuery,
@@ -216,7 +262,7 @@ export default {
       showItemModal,
       selectedItem,
       showItemDetail,
-      currencySymbol,
+      formatMoney,
       translateProductName,
       translateWarehouse
     }
@@ -252,6 +298,64 @@ export default {
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Narrow screens: stack title above the actions and let the search box
+   shrink, otherwise its 300px min-width plus the export button overflow. */
+@media (max-width: 640px) {
+  .card-header {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions .search-box {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.export-button svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+}
+
+.export-button:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+  border-color: var(--color-text-subtle);
+}
+
+.export-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .search-box {

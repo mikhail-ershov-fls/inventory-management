@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from datetime import date
 from itertools import count
 from typing import List, Literal, Optional
@@ -56,6 +57,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Compress JSON responses (list endpoints like /api/orders are ~110 KB uncompressed).
+# Responses under 1 KB are sent as-is since compressing them isn't worth the CPU.
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Data models
 class InventoryItem(BaseModel):
@@ -261,13 +266,22 @@ def get_recent_transactions():
     """Get recent transactions"""
     return recent_transactions
 
+def _filtered_report_orders(warehouse, category, status, month):
+    """Orders matching the shared filter bar, used by the report endpoints"""
+    return filter_by_month(apply_filters(orders, warehouse, category, status), month)
+
 @app.get("/api/reports/quarterly")
-def get_quarterly_reports():
-    """Get quarterly performance reports"""
+def get_quarterly_reports(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
+    """Get quarterly performance reports, optionally filtered"""
     # Calculate quarterly statistics from orders
     quarters = {}
 
-    for order in orders:
+    for order in _filtered_report_orders(warehouse, category, status, month):
         order_date = order.get('order_date', '')
         # Determine quarter
         if '2025-01' in order_date or '2025-02' in order_date or '2025-03' in order_date:
@@ -298,6 +312,7 @@ def get_quarterly_reports():
     # Calculate averages and fulfillment rate
     result = []
     for q, data in quarters.items():
+        data['total_revenue'] = round(data['total_revenue'], 2)
         if data['total_orders'] > 0:
             data['avg_order_value'] = round(data['total_revenue'] / data['total_orders'], 2)
             data['fulfillment_rate'] = round((data['delivered_orders'] / data['total_orders']) * 100, 1)
@@ -308,11 +323,16 @@ def get_quarterly_reports():
     return result
 
 @app.get("/api/reports/monthly-trends")
-def get_monthly_trends():
-    """Get month-over-month trends"""
+def get_monthly_trends(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
+    """Get month-over-month trends, optionally filtered"""
     months = {}
 
-    for order in orders:
+    for order in _filtered_report_orders(warehouse, category, status, month):
         order_date = order.get('order_date', '')
         if not order_date:
             continue
@@ -333,8 +353,10 @@ def get_monthly_trends():
         if order.get('status') == 'Delivered':
             months[month]['delivered_count'] += 1
 
-    # Convert to list and sort
+    # Convert to list and sort (round float sums like 1993655.7400000002)
     result = list(months.values())
+    for data in result:
+        data['revenue'] = round(data['revenue'], 2)
     result.sort(key=lambda x: x['month'])
     return result
 

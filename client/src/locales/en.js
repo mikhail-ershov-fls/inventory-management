@@ -89,6 +89,8 @@ export default {
     skus: 'SKUs',
     searchPlaceholder: 'Search by item name...',
     clearSearch: 'Clear search',
+    exportCsv: 'Export CSV',
+    exportCsvTitle: 'Download the items currently shown as a CSV file',
     totalItems: 'Total Items',
     totalValue: 'Total Value',
     lowStockItems: 'Low Stock Items',
@@ -177,6 +179,29 @@ export default {
   },
 
   // Demand Forecast
+  reports: {
+    title: 'Performance Reports',
+    description: 'View quarterly performance metrics and monthly trends',
+    quarterlyPerformance: 'Quarterly Performance',
+    quarter: 'Quarter',
+    totalOrders: 'Total Orders',
+    totalRevenue: 'Total Revenue',
+    avgOrderValue: 'Avg Order Value',
+    fulfillmentRate: 'Fulfillment Rate',
+    monthlyRevenueTrend: 'Monthly Revenue Trend',
+    monthOverMonth: 'Month-over-Month Analysis',
+    month: 'Month',
+    orders: 'Orders',
+    revenue: 'Revenue',
+    change: 'Change',
+    growthRate: 'Growth Rate',
+    totalRevenueSelected: 'Total Revenue (Selected Period)',
+    avgMonthlyRevenue: 'Avg Monthly Revenue',
+    totalOrdersSelected: 'Total Orders (Selected Period)',
+    bestQuarter: 'Best Performing Quarter',
+    noData: 'No orders match the current filters'
+  },
+
   demand: {
     title: 'Demand Forecast',
     description: 'Analyze demand trends and forecasts',
@@ -372,6 +397,8 @@ export default {
   // Common
   common: {
     loading: 'Loading...',
+    loadError: 'Could not load data. Check your connection and try again.',
+    retry: 'Retry',
     error: 'Error',
     noData: 'No data available',
     viewDetails: 'View Details',

@@ -5,9 +5,9 @@
       <p>{{ t('demand.description') }}</p>
     </div>
 
-    <div v-if="loading" class="loading">{{ t('common.loading') }}</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else>
+    <div v-if="isInitialLoading" class="loading" role="status">{{ t('common.loading') }}</div>
+    <ErrorState v-else-if="error" @retry="loadForecasts" />
+    <div v-else :class="{ 'is-refreshing': loading }" :aria-busy="loading">
       <div class="demand-trend-cards">
         <div class="trend-card increasing-card">
           <div class="trend-header">
@@ -115,13 +115,16 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { api } from '../api'
 import { useFilters } from '../composables/useFilters'
 import { useI18n } from '../composables/useI18n'
+import { useDataLoader } from '../composables/useDataLoader'
+import ErrorState from '../components/ErrorState.vue'
 
 export default {
   name: 'Demand',
+  components: {
+    ErrorState
+  },
   setup() {
     const { t } = useI18n()
-    const loading = ref(true)
-    const error = ref(null)
     const allForecasts = ref([])
     const inventoryItems = ref([])
 
@@ -139,27 +142,20 @@ export default {
       return allForecasts.value.filter(f => validSkus.has(f.item_sku))
     })
 
-    const loadForecasts = async () => {
-      try {
-        loading.value = true
+    // Latest-request-wins loading; keeps current data visible while refetching (see useDataLoader)
+    const { loading, error, isInitialLoading, reload: loadForecasts } = useDataLoader(
+      (signal) => {
         const filters = getCurrentFilters()
-
-        const [forecastsData, inventoryData] = await Promise.all([
-          api.getDemandForecasts(),
-          api.getInventory({
-            warehouse: filters.warehouse,
-            category: filters.category
-          })
+        return Promise.all([
+          api.getDemandForecasts({ signal }),
+          api.getInventory({ warehouse: filters.warehouse, category: filters.category }, { signal })
         ])
-
+      },
+      ([forecastsData, inventoryData]) => {
         allForecasts.value = forecastsData
         inventoryItems.value = inventoryData
-      } catch (err) {
-        error.value = 'Failed to load demand forecasts: ' + err.message
-      } finally {
-        loading.value = false
       }
-    }
+    )
 
     // Watch for filter changes and reload data
     watch([selectedLocation, selectedCategory], () => {
@@ -212,6 +208,8 @@ export default {
     return {
       t,
       loading,
+      isInitialLoading,
+      loadForecasts,
       error,
       forecasts,
       getForecastsByTrend,

@@ -5,9 +5,9 @@
       <p>Track and resolve inventory shortages</p>
     </div>
 
-    <div v-if="loading" class="loading">Loading backlog...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else>
+    <div v-if="isInitialLoading" class="loading" role="status">{{ t('common.loading') }}</div>
+    <ErrorState v-else-if="error" @retry="loadBacklog" />
+    <div v-else :class="{ 'is-refreshing': loading }" :aria-busy="loading">
       <div class="stats-grid">
         <div class="stat-card danger">
           <div class="stat-label">High Priority</div>
@@ -85,12 +85,17 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { api } from '../api'
 import { useFilters } from '../composables/useFilters'
+import { useI18n } from '../composables/useI18n'
+import { useDataLoader } from '../composables/useDataLoader'
+import ErrorState from '../components/ErrorState.vue'
 
 export default {
   name: 'Backlog',
+  components: {
+    ErrorState
+  },
   setup() {
-    const loading = ref(true)
-    const error = ref(null)
+    const { t } = useI18n()
     const allBacklogItems = ref([])
     const inventoryItems = ref([])
 
@@ -108,27 +113,20 @@ export default {
       return allBacklogItems.value.filter(b => validSkus.has(b.item_sku))
     })
 
-    const loadBacklog = async () => {
-      try {
-        loading.value = true
+    // Latest-request-wins loading; keeps current data visible while refetching (see useDataLoader)
+    const { loading, error, isInitialLoading, reload: loadBacklog } = useDataLoader(
+      (signal) => {
         const filters = getCurrentFilters()
-
-        const [backlogData, inventoryData] = await Promise.all([
-          api.getBacklog(),
-          api.getInventory({
-            warehouse: filters.warehouse,
-            category: filters.category
-          })
+        return Promise.all([
+          api.getBacklog({ signal }),
+          api.getInventory({ warehouse: filters.warehouse, category: filters.category }, { signal })
         ])
-
+      },
+      ([backlogData, inventoryData]) => {
         allBacklogItems.value = backlogData
         inventoryItems.value = inventoryData
-      } catch (err) {
-        error.value = 'Failed to load backlog: ' + err.message
-      } finally {
-        loading.value = false
       }
-    }
+    )
 
     const getBacklogByPriority = (priority) => {
       return backlogItems.value.filter(item => item.priority === priority)
@@ -142,7 +140,10 @@ export default {
     onMounted(loadBacklog)
 
     return {
+      t,
       loading,
+      isInitialLoading,
+      loadBacklog,
       error,
       backlogItems,
       getBacklogByPriority

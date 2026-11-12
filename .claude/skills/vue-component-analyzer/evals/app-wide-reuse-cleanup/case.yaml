@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: app-wide-reuse-cleanup
+expected_outcome: |
+  Duplicated helpers (formatDate variants, translateCategory, close/dropdown handlers) are consolidated into shared utils or composables without changing any call site's output, and the repeated modal shell is either extracted into a shared base component or clearly recommended with a plan. The client builds, every page and modal still renders the same with no console errors, server/ is untouched, and a report lists what was consolidated, what was left and why.

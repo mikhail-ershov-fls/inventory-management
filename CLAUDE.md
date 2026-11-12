@@ -52,6 +52,7 @@ npm install && npm run dev
 - `GET /api/inventory` - Filters: warehouse, category
 - `GET /api/orders` - Filters: warehouse, category, status, month
 - `GET /api/dashboard/summary` - All filters
+- `GET /api/reports/quarterly`, `/api/reports/monthly-trends` - All filters
 - `GET /api/demand`, `/api/backlog` - No filters
 - `GET /api/spending/*` - Summary, monthly, categories, transactions
 
@@ -61,6 +62,9 @@ npm install && npm run dev
 3. Update Pydantic models when changing JSON data structure
 4. Inventory filters don't support month (no time dimension)
 5. Revenue goals: $800K/month single, $9.6M YTD all months
+
+## Code Conventions
+- Always document non-obvious logic changes with comments
 
 ## File Locations
 - Views: `client/src/views/*.vue`

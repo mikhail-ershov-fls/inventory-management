@@ -89,6 +89,8 @@ export default {
     skus: 'SKU',
     searchPlaceholder: '品目名で検索...',
     clearSearch: '検索をクリア',
+    exportCsv: 'CSVエクスポート',
+    exportCsvTitle: '現在表示中の品目をCSVファイルとしてダウンロード',
     totalItems: '総品目数',
     totalValue: '総価値',
     lowStockItems: '在庫僅少品目',
@@ -177,6 +179,29 @@ export default {
   },
 
   // Demand Forecast
+  reports: {
+    title: 'パフォーマンスレポート',
+    description: '四半期ごとの実績指標と月次トレンドを表示',
+    quarterlyPerformance: '四半期実績',
+    quarter: '四半期',
+    totalOrders: '総注文数',
+    totalRevenue: '総売上',
+    avgOrderValue: '平均注文額',
+    fulfillmentRate: '出荷完了率',
+    monthlyRevenueTrend: '月次売上推移',
+    monthOverMonth: '前月比分析',
+    month: '月',
+    orders: '注文数',
+    revenue: '売上',
+    change: '増減',
+    growthRate: '成長率',
+    totalRevenueSelected: '総売上（選択期間）',
+    avgMonthlyRevenue: '月平均売上',
+    totalOrdersSelected: '総注文数（選択期間）',
+    bestQuarter: '最高実績の四半期',
+    noData: '現在のフィルターに一致する注文はありません'
+  },
+
   demand: {
     title: '需要予測',
     description: '需要動向の分析と将来のニーズの予測',
@@ -372,6 +397,8 @@ export default {
   // Common
   common: {
     loading: '読み込み中...',
+    loadError: 'データを読み込めませんでした。接続を確認して、もう一度お試しください。',
+    retry: '再試行',
     error: 'エラー',
     noData: 'データがありません',
     viewDetails: '詳細を見る',

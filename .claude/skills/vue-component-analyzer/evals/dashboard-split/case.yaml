@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: dashboard-split
+expected_outcome: |
+  Dashboard.vue is split into focused child components (e.g. KPI cards, order health, inventory value, shortages table, top products) that receive data via props and emit events, with the parent keeping data loading and filters. Performance issues in the dashboard are fixed. The client builds, the dashboard renders the same sections and values with no console errors, Create PO / View PO and detail modals still open, and a report explains the new structure.

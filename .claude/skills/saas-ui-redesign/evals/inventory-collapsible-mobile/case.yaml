@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: inventory-collapsible-mobile
+expected_outcome: |
+  Run from the inventory-management repo root. The client builds; a left sidebar with icons replaces the top nav; a toggle collapses it to an icon rail and the state survives a reload; at 390px no page scrolls sideways and the sidebar becomes a drawer opened from a menu button; switching to Japanese translates the sidebar labels; filters still change the data.

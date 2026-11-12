@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: fieldops-script-setup-app
+expected_outcome: |
+  The fieldops app builds; a left sidebar replaces NavBar's top bar and links to Dashboard, Jobs, Technicians and Settings; search input and alerts button still exist and work; consistent token-based spacing on all four pages; no console errors; works at phone width without horizontal scrolling.
+context:
+  scaffold_script: place-files.sh

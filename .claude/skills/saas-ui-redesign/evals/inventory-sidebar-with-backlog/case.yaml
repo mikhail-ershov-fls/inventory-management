@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: inventory-sidebar-with-backlog
+expected_outcome: |
+  Run from the inventory-management repo root. The client builds; a left sidebar replaces the top nav and links to all six existing pages plus a new /backlog route; spacing comes from shared tokens; filters, language switcher and profile menu still work; no new console errors (the existing /api/tasks 404 is pre-existing); no changes to server/.
