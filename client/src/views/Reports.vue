@@ -310,7 +310,7 @@ export default {
 }
 
 .card {
-  background: white;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: var(--space-6);
   margin-bottom: var(--space-6);
@@ -324,7 +324,7 @@ export default {
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -334,21 +334,21 @@ export default {
 }
 
 .reports-table th {
-  background: #f8fafc;
+  background: var(--color-bg);
   padding: var(--space-3);
   text-align: left;
   font-weight: 600;
-  color: #64748b;
-  border-bottom: 2px solid #e2e8f0;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid var(--color-border);
 }
 
 .reports-table td {
   padding: var(--space-3);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .reports-table tr:hover {
-  background: #f8fafc;
+  background: var(--color-bg);
 }
 
 .chart-container {
@@ -398,7 +398,7 @@ export default {
 .bar-label {
   margin-top: var(--space-2);
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   text-align: center;
   transform: rotate(-45deg);
   white-space: nowrap;
@@ -413,7 +413,7 @@ export default {
 }
 
 .stat-card {
-  background: white;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: var(--space-6);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -422,14 +422,14 @@ export default {
 
 .stat-label {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   margin-bottom: var(--space-2);
 }
 
 .stat-value {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .badge {
@@ -467,7 +467,7 @@ export default {
 .loading {
   text-align: center;
   padding: var(--space-12);
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .error {

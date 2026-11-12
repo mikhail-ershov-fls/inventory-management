@@ -157,11 +157,11 @@ const handleLogout = () => {
   white-space: nowrap;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .chevron {
-  color: #64748b;
+  color: var(--color-text-muted);
   transition: transform 0.2s ease;
 }
 
@@ -188,7 +188,7 @@ const handleLogout = () => {
   display: flex;
   gap: var(--space-3);
   align-items: center;
-  background: #f8fafc;
+  background: var(--color-bg);
 }
 
 .avatar-large {
@@ -213,14 +213,14 @@ const handleLogout = () => {
 
 .user-name {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 0.938rem;
   margin-bottom: var(--space-1);
 }
 
 .user-email {
   font-size: 0.813rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -228,7 +228,7 @@ const handleLogout = () => {
 
 .dropdown-divider {
   height: 1px;
-  background: #e2e8f0;
+  background: var(--color-border);
   margin: var(--space-2) 0;
 }
 
@@ -246,15 +246,15 @@ const handleLogout = () => {
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #334155;
+  color: var(--color-text-secondary);
 }
 
 .dropdown-item:hover {
-  background: #f8fafc;
+  background: var(--color-bg);
 }
 
 .dropdown-item svg {
-  color: #64748b;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 
@@ -267,7 +267,7 @@ const handleLogout = () => {
 }
 
 .dropdown-item.logout:hover {
-  background: #fef2f2;
+  background: var(--color-danger-soft);
 }
 
 .task-badge {

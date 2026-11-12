@@ -85,7 +85,7 @@
               <!-- Left: Donut Chart -->
               <div class="order-health-chart">
                 <svg viewBox="0 0 200 200" class="donut-svg-compact">
-                  <circle cx="100" cy="100" r="65" fill="none" stroke="#e2e8f0" stroke-width="25"/>
+                  <circle cx="100" cy="100" r="65" fill="none" stroke="var(--color-border)" stroke-width="25"/>
                   <circle cx="100" cy="100" r="65" fill="none" stroke="#10b981" stroke-width="25"
                     :stroke-dasharray="`${getCircleSegment(statusData.delivered)} 408`"
                     stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
@@ -731,7 +731,7 @@ export default {
 <style scoped>
 .header-meta {
   font-size: 0.813rem;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .kpi-section {
@@ -848,7 +848,7 @@ export default {
   align-items: center;
   gap: var(--space-3);
   font-size: 0.875rem;
-  color: #475569;
+  color: var(--color-text-secondary);
 }
 
 .legend-dot {
@@ -885,7 +885,7 @@ export default {
 
 .donut-center-label {
   font-size: 12px;
-  fill: #64748b;
+  fill: var(--color-text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -893,7 +893,7 @@ export default {
 
 .donut-center-value {
   font-size: 36px;
-  fill: #0f172a;
+  fill: var(--color-text);
   font-weight: 700;
 }
 
@@ -908,7 +908,7 @@ export default {
   align-items: center;
   gap: var(--space-2);
   font-size: 0.875rem;
-  color: #475569;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -930,7 +930,7 @@ export default {
 
 .health-metric-label {
   font-size: 0.688rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -939,7 +939,7 @@ export default {
 .health-metric-value {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.025em;
 }
 
@@ -973,14 +973,14 @@ export default {
   min-width: 120px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary);
   flex-shrink: 0;
 }
 
 .h-bar-container {
   flex: 1;
   height: 32px;
-  background: #f8fafc;
+  background: var(--color-surface-muted);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -1012,8 +1012,8 @@ export default {
   justify-content: space-between;
   padding-right: var(--space-4);
   font-size: 0.75rem;
-  color: #94a3b8;
-  border-right: 1px solid #e2e8f0;
+  color: var(--color-text-subtle);
+  border-right: 1px solid var(--color-border);
 }
 
 .line-chart-area {
@@ -1054,7 +1054,7 @@ export default {
 }
 
 .line-bar.empty-bar {
-  background: #e2e8f0;
+  background: var(--color-border);
   box-shadow: none;
   min-height: 4px;
 }
@@ -1072,14 +1072,14 @@ export default {
 .line-bar-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
 .no-data {
   padding: var(--space-8);
   text-align: center;
-  color: #94a3b8;
+  color: var(--color-text-subtle);
   font-size: 0.875rem;
 }
 
@@ -1111,7 +1111,7 @@ export default {
 }
 
 .clickable-row:hover {
-  background: #eff6ff !important;
+  background: var(--color-accent-soft) !important;
 }
 
 /* Tasks Card Styles */
@@ -1132,7 +1132,7 @@ export default {
 .task-input {
   flex: 1;
   padding: var(--space-3);
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s ease;
@@ -1166,7 +1166,7 @@ export default {
 .no-tasks {
   text-align: center;
   padding: var(--space-8);
-  color: #64748b;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
@@ -1181,15 +1181,15 @@ export default {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3);
-  background: #f8fafc;
+  background: var(--color-bg);
   border-radius: 8px;
   border: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .task-item:hover {
-  border-color: #e2e8f0;
-  background: white;
+  border-color: var(--color-border);
+  background: var(--color-surface);
 }
 
 .task-item.completed {
@@ -1198,7 +1198,7 @@ export default {
 
 .task-item.completed .task-text {
   text-decoration: line-through;
-  color: #94a3b8;
+  color: var(--color-text-subtle);
 }
 
 .task-checkbox {
@@ -1212,7 +1212,7 @@ export default {
   flex: 1;
   cursor: pointer;
   user-select: none;
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 0.95rem;
 }
 

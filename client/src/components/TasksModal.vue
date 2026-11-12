@@ -259,7 +259,7 @@ export default {
 }
 
 .modal-container {
-  background: white;
+  background: var(--color-surface);
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   width: 90%;
@@ -278,20 +278,20 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: var(--space-6) var(--space-8);
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .modal-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
   margin: 0;
 }
 
 .close-button {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: var(--space-2);
   display: flex;
@@ -302,8 +302,8 @@ export default {
 }
 
 .close-button:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
 }
 
 .modal-body {
@@ -314,7 +314,7 @@ export default {
 
 .modal-footer {
   padding: var(--space-6) var(--space-8);
-  border-top: 2px solid #e2e8f0;
+  border-top: 2px solid var(--color-border);
   display: flex;
   justify-content: flex-end;
   gap: var(--space-4);
@@ -322,8 +322,8 @@ export default {
 
 .btn-secondary {
   padding: var(--space-3) var(--space-6);
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -332,12 +332,12 @@ export default {
 }
 
 .btn-secondary:hover {
-  background: #e2e8f0;
+  background: var(--color-border);
 }
 
 /* Task Form */
 .task-form {
-  background: #f8fafc;
+  background: var(--color-bg);
   border-radius: 12px;
   padding: var(--space-6);
   margin-bottom: var(--space-6);
@@ -372,13 +372,13 @@ export default {
 label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary);
 }
 
 .task-input,
 .task-select {
   padding: var(--space-3);
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s ease;
@@ -393,7 +393,7 @@ label {
 
 .task-select {
   cursor: pointer;
-  background: white;
+  background: var(--color-surface);
 }
 
 .task-add-btn {
@@ -420,14 +420,14 @@ label {
 
 .tasks-divider {
   height: 1px;
-  background: #e2e8f0;
+  background: var(--color-border);
   margin: var(--space-8) 0;
 }
 
 .no-tasks {
   text-align: center;
   padding: var(--space-12);
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 1.1rem;
   font-style: italic;
 }
@@ -439,15 +439,15 @@ label {
 }
 
 .task-item {
-  background: white;
-  border: 2px solid #e2e8f0;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
   border-radius: 10px;
   padding: var(--space-4) var(--space-5);
   transition: all 0.2s ease;
 }
 
 .task-item:hover {
-  border-color: #cbd5e1;
+  border-color: var(--color-border-strong);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -460,7 +460,7 @@ label {
 }
 
 .task-item.priority-low {
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid var(--color-accent);
 }
 
 .task-item.completed {
@@ -494,7 +494,7 @@ label {
   flex: 1;
   cursor: pointer;
   user-select: none;
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.4;
@@ -502,7 +502,7 @@ label {
 
 .task-item.completed .task-title {
   text-decoration: line-through;
-  color: #94a3b8;
+  color: var(--color-text-subtle);
 }
 
 .task-delete-btn {
@@ -563,11 +563,11 @@ label {
   align-items: center;
   gap: var(--space-2);
   font-size: 0.813rem;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .task-due-date svg {
-  color: #94a3b8;
+  color: var(--color-text-subtle);
 }
 
 .status-badge {

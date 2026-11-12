@@ -314,6 +314,11 @@ export default {
   },
 
   // Language
+  theme: {
+    switchToDark: 'ダークテーマに切り替え',
+    switchToLight: 'ライトテーマに切り替え'
+  },
+
   language: {
     english: 'English',
     japanese: '日本語',

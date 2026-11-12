@@ -26,6 +26,7 @@
           <span class="topbar-title">{{ currentPageTitle }}</span>
         </div>
         <div class="topbar-actions">
+          <ThemeToggle />
           <LanguageSwitcher />
           <ProfileMenu
             @show-profile-details="showProfileDetails = true"
@@ -67,6 +68,7 @@ import ProfileDetailsModal from './components/ProfileDetailsModal.vue'
 import TasksModal from './components/TasksModal.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import AppSidebar from './components/AppSidebar.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
 import { ICONS, findNavItem } from './navigation'
 
 export default {
@@ -77,7 +79,8 @@ export default {
     ProfileDetailsModal,
     TasksModal,
     LanguageSwitcher,
-    AppSidebar
+    AppSidebar,
+    ThemeToggle
   },
   setup() {
     const { currentUser } = useAuth()
@@ -281,6 +284,46 @@ export default {
   --topbar-height: 60px;
   --content-max-width: 1440px;
   --transition: 150ms ease;
+  --topbar-bg: rgb(255 255 255 / 0.9);
+  color-scheme: light;
+}
+
+/* =========================================================================
+   Dark theme. Activated by data-theme="dark" on <html> (see composables/useTheme.js).
+   Only color/depth tokens change; components that read tokens follow automatically.
+   Neutrals stay on the slate scale; status hues are lifted for contrast on dark surfaces
+   and their "-soft" fills become translucent tints instead of pastel backgrounds.
+   ========================================================================= */
+:root[data-theme="dark"] {
+  --color-bg: #0b1222;
+  --color-surface: #131c2f;
+  --color-surface-muted: #1a2438;
+  --color-border: #263248;
+  --color-border-strong: #334155;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+
+  --color-accent: #3b82f6;
+  --color-accent-hover: #60a5fa;
+  --color-accent-soft: rgb(59 130 246 / 0.16);
+
+  --color-success: #4ade80;
+  --color-success-soft: rgb(34 197 94 / 0.14);
+  --color-info: #60a5fa;
+  --color-info-soft: rgb(59 130 246 / 0.14);
+  --color-warning: #facc15;
+  --color-warning-soft: rgb(234 179 8 / 0.14);
+  --color-danger: #f87171;
+  --color-danger-soft: rgb(239 68 68 / 0.14);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+
+  --topbar-bg: rgb(19 28 47 / 0.88);
+  color-scheme: dark;
 }
 
 * {
@@ -337,7 +380,7 @@ body {
   align-items: center;
   gap: var(--space-4);
   padding: 0 var(--space-8);
-  background: rgb(255 255 255 / 0.9);
+  background: var(--topbar-bg);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border);
 }

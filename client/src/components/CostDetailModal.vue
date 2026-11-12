@@ -165,7 +165,7 @@ const close = () => {
 }
 
 .modal-container {
-  background: white;
+  background: var(--color-surface);
   border-radius: 12px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   max-width: 600px;
@@ -181,20 +181,20 @@ const close = () => {
   align-items: center;
   justify-content: space-between;
   padding: var(--space-6);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.025em;
 }
 
 .close-button {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: var(--space-2);
   display: flex;
@@ -205,8 +205,8 @@ const close = () => {
 }
 
 .close-button:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
 }
 
 .modal-body {
@@ -258,7 +258,7 @@ const close = () => {
 
 .cost-item.procurement {
   border-color: #93c5fd;
-  background: #eff6ff;
+  background: var(--color-accent-soft);
 }
 
 .cost-item.operational {
@@ -268,12 +268,12 @@ const close = () => {
 
 .cost-item.labor {
   border-color: #86efac;
-  background: #f0fdf4;
+  background: var(--color-success-soft);
 }
 
 .cost-item.overhead {
   border-color: #fcd34d;
-  background: #fffbeb;
+  background: var(--color-warning-soft);
 }
 
 .cost-header {
@@ -319,7 +319,7 @@ const close = () => {
 
 .cost-name {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 1rem;
   margin-bottom: var(--space-1);
 }
@@ -327,38 +327,38 @@ const close = () => {
 .cost-amount {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .cost-percentage {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
 .modal-footer {
   padding: var(--space-6);
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: flex-end;
 }
 
 .btn-secondary {
   padding: var(--space-3) var(--space-5);
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-weight: 500;
   font-size: 0.875rem;
-  color: #334155;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;
 }
 
 .btn-secondary:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
+  background: var(--color-border);
+  border-color: var(--color-border-strong);
 }
 
 /* Modal transition animations */
