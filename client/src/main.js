@@ -7,16 +7,20 @@ import Orders from './views/Orders.vue'
 import Demand from './views/Demand.vue'
 import Spending from './views/Spending.vue'
 import Reports from './views/Reports.vue'
+import Backlog from './views/Backlog.vue'
 
 const router = createRouter({
   history: createWebHistory(),
+  // Main content scrolls inside the window; reset to top on page change
+  scrollBehavior: () => ({ top: 0 }),
   routes: [
     { path: '/', component: Dashboard },
     { path: '/inventory', component: Inventory },
     { path: '/orders', component: Orders },
     { path: '/demand', component: Demand },
     { path: '/spending', component: Spending },
-    { path: '/reports', component: Reports }
+    { path: '/reports', component: Reports },
+    { path: '/backlog', component: Backlog }
   ]
 })
 
