@@ -8,6 +8,7 @@ export default {
     demandForecast: 'Demand Forecast',
     reports: 'Reports',
     backlog: 'Backlog',
+    restocking: 'Restocking',
     sectionOperations: 'Operations',
     sectionAnalytics: 'Analytics',
     mainNavigation: 'Main navigation',
@@ -123,6 +124,18 @@ export default {
     onTimeDelivery: 'On-Time Delivery',
     itemsCount: '{count} items',
     quantity: 'Qty',
+    submittedOrders: 'Submitted Orders',
+    noSubmittedOrders: 'No restocking orders yet. Place one from the Restocking tab.',
+    submittedTable: {
+      orderId: 'Order ID',
+      submitted: 'Submitted',
+      leadTime: 'Lead Time',
+      expectedDelivery: 'Expected Delivery',
+      total: 'Total',
+      status: 'Status'
+    },
+    submittedStatus: 'Submitted',
+    leadTimeDays: '{count} days',
     table: {
       orderNumber: 'Order Number',
       orderId: 'Order ID',
@@ -391,6 +404,39 @@ export default {
       createFailed: 'Failed to create purchase order',
       loadFailed: 'Failed to load purchase order',
       notFound: 'No purchase order found for this item'
+    }
+  },
+
+  restocking: {
+    title: 'Restocking',
+    description: 'Plan a restocking order from the demand forecast within your budget',
+    budget: 'Available Budget',
+    budgetHint: 'Covering every forecast gap costs {amount}',
+    planned: 'Order Total',
+    remaining: 'Remaining Budget',
+    leadTime: 'Delivery Lead Time',
+    days: '{count} days',
+    recommended: 'Recommended Items',
+    selectedCount: '{selected} of {total} selected',
+    noRecommendations: 'No items fit this budget. Raise the budget to see recommendations.',
+    partial: 'Partial',
+    include: 'Include {name}',
+    table: {
+      sku: 'SKU',
+      item: 'Item',
+      trend: 'Trend',
+      gap: 'Demand Gap',
+      quantity: 'Order Qty',
+      unitCost: 'Unit Cost',
+      lineTotal: 'Line Total',
+      leadTime: 'Lead Time'
+    },
+    placeOrder: 'Place Order',
+    placing: 'Placing order...',
+    success: 'Order {id} submitted. Expected delivery {date}.',
+    viewOrders: 'View in Orders',
+    errors: {
+      submitFailed: 'Failed to place the restocking order'
     }
   },
 

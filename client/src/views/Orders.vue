@@ -27,6 +27,65 @@
         </div>
       </div>
 
+      <div class="card submitted-card">
+        <div class="card-header">
+          <h3 class="card-title">{{ t('orders.submittedOrders') }} ({{ submittedOrders.length }})</h3>
+        </div>
+        <ErrorState v-if="submittedError" @retry="loadSubmittedOrders" />
+        <p v-else-if="!submittedOrders.length" class="empty-state">
+          {{ t('orders.noSubmittedOrders') }}
+          <router-link to="/restocking">{{ t('nav.restocking') }}</router-link>
+        </p>
+        <div v-else class="table-container">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th class="col-order-number">{{ t('orders.submittedTable.orderId') }}</th>
+                <th class="col-items">{{ t('orders.table.items') }}</th>
+                <th class="col-status">{{ t('orders.submittedTable.status') }}</th>
+                <th class="col-date">{{ t('orders.submittedTable.submitted') }}</th>
+                <th class="col-lead">{{ t('orders.submittedTable.leadTime') }}</th>
+                <th class="col-date">{{ t('orders.submittedTable.expectedDelivery') }}</th>
+                <th class="col-value">{{ t('orders.submittedTable.total') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="order in submittedOrders" :key="order.id">
+                <td class="col-order-number">
+                  <strong>{{ order.id }}</strong>
+                </td>
+                <td class="col-items">
+                  <details class="items-details">
+                    <summary class="items-summary">
+                      {{ t('orders.itemsCount', { count: order.items.length }) }}
+                    </summary>
+                    <div class="items-dropdown">
+                      <div v-for="item in order.items" :key="item.sku" class="item-entry">
+                        <span class="item-name">{{ item.sku }} - {{ item.name }}</span>
+                        <span class="item-meta"
+                          >{{ t('orders.quantity') }}: {{ item.quantity }} @ {{ formatMoney(item.unit_cost, 2) }}</span
+                        >
+                      </div>
+                    </div>
+                  </details>
+                </td>
+                <td class="col-status">
+                  <span class="badge info">{{ t('orders.submittedStatus') }}</span>
+                </td>
+                <td class="col-date">{{ formatCalendar(order.order_date) }}</td>
+                <td class="col-lead">
+                  <strong>{{ t('orders.leadTimeDays', { count: order.lead_time_days }) }}</strong>
+                </td>
+                <td class="col-date">{{ formatCalendar(order.expected_delivery_date) }}</td>
+                <td class="col-value">
+                  <strong>{{ formatMoney(order.total_cost, 2) }}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ t('orders.allOrders') }} ({{ orders.length }})</h3>
@@ -92,6 +151,7 @@ import { useI18n } from '../composables/useI18n'
 import { useDataLoader } from '../composables/useDataLoader'
 import ErrorState from '../components/ErrorState.vue'
 import { useCurrency } from '../composables/useCurrency'
+import { formatCalendarDate } from '../utils/restock'
 
 export default {
   name: 'Orders',
@@ -150,9 +210,32 @@ export default {
       })
     }
 
-    onMounted(loadOrders)
+    // Restocking orders from the Restocking tab. Loaded on their own (not filter-driven)
+    // so a failure here doesn't hide the customer orders table.
+    const submittedOrders = ref([])
+    const { error: submittedError, reload: loadSubmittedOrders } = useDataLoader(
+      (signal) => api.getRestockOrders({ signal }),
+      (data) => {
+        submittedOrders.value = data
+      }
+    )
+
+    // API sends calendar dates (YYYY-MM-DD); format them as local days, not UTC
+    const formatCalendar = (isoDate) => {
+      const { currentLocale } = useI18n()
+      return formatCalendarDate(isoDate, currentLocale.value === 'ja' ? 'ja-JP' : 'en-US')
+    }
+
+    onMounted(() => {
+      loadOrders()
+      loadSubmittedOrders()
+    })
 
     return {
+      submittedOrders,
+      submittedError,
+      loadSubmittedOrders,
+      formatCalendar,
       t,
       loading,
       isInitialLoading,
@@ -200,6 +283,25 @@ export default {
 
 .col-value {
   width: 120px;
+}
+
+.col-lead {
+  width: 110px;
+}
+
+.submitted-card {
+  margin-bottom: var(--space-6);
+}
+
+.empty-state {
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.empty-state a {
+  margin-left: var(--space-1);
+  color: var(--color-accent);
 }
 
 /* Items details styling */

@@ -8,6 +8,7 @@ export default {
     demandForecast: '需要予測',
     reports: 'レポート',
     backlog: 'バックログ',
+    restocking: '補充発注',
     sectionOperations: 'オペレーション',
     sectionAnalytics: '分析',
     mainNavigation: 'メインナビゲーション',
@@ -123,6 +124,18 @@ export default {
     onTimeDelivery: '定時配達',
     itemsCount: '{count}件',
     quantity: '数量',
+    submittedOrders: '送信済み発注',
+    noSubmittedOrders: '補充発注はまだありません。補充発注タブから発注できます。',
+    submittedTable: {
+      orderId: '発注ID',
+      submitted: '送信日',
+      leadTime: 'リードタイム',
+      expectedDelivery: '納品予定日',
+      total: '合計',
+      status: 'ステータス'
+    },
+    submittedStatus: '送信済み',
+    leadTimeDays: '{count}日',
     table: {
       orderNumber: '注文番号',
       orderId: '注文ID',
@@ -391,6 +404,39 @@ export default {
       createFailed: '発注書の作成に失敗しました',
       loadFailed: '発注書の読み込みに失敗しました',
       notFound: 'この品目の発注書が見つかりません'
+    }
+  },
+
+  restocking: {
+    title: '補充発注',
+    description: '需要予測に基づき、予算内で補充発注を計画します',
+    budget: '利用可能な予算',
+    budgetHint: 'すべての需要差分を満たす費用: {amount}',
+    planned: '発注合計',
+    remaining: '残り予算',
+    leadTime: '納品リードタイム',
+    days: '{count}日',
+    recommended: '推奨品目',
+    selectedCount: '{total}件中{selected}件を選択',
+    noRecommendations: 'この予算では発注できる品目がありません。予算を増やしてください。',
+    partial: '一部',
+    include: '{name}を含める',
+    table: {
+      sku: 'SKU',
+      item: '品目',
+      trend: 'トレンド',
+      gap: '需要差分',
+      quantity: '発注数量',
+      unitCost: '単価',
+      lineTotal: '小計',
+      leadTime: 'リードタイム'
+    },
+    placeOrder: '発注する',
+    placing: '発注中...',
+    success: '発注 {id} を送信しました。納品予定日: {date}',
+    viewOrders: '注文で表示',
+    errors: {
+      submitFailed: '補充発注に失敗しました'
     }
   },
 
